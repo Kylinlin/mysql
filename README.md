@@ -1,2 +1,0 @@
-# install_mysql_automatically
-一键自动化安装mysql
