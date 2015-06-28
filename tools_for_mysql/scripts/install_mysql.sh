@@ -1,9 +1,10 @@
 #!/bin/bash
 
-SRC_LOACTION=/usr/local/src
+SRC_LOCATION=/usr/local/src
+TOOLS_LOACTION=$SRC_LOCATION/tools_for_mysql
 MYSQL_DISTRIBUTION=mysql-5.6.25
 MYSQL_LOCATION=/usr/local/mysql
-MY-CNF=/data/3306/my.cnf
+MY_CNF=/data/3306/my.cnf
 MYSQL=/data/3306/mysql
 
 . /etc/rc.d/init.d/functions
@@ -40,9 +41,9 @@ yum install net-tools -y
 show_head
 echo "Installing mysql.........."
 show_tail
-cd $SRC_LOACTION
-tar xf $MYSQL_DISTRIBUTION
-cd $MYSQL_DISTRIBUTION
+cd $TOOLS_LOACTION/tools
+tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION
+cd $SRC_LOCATION/$MYSQL_DISTRIBUTION
 
 cmake \
 -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
@@ -86,7 +87,7 @@ show_tail
 mkdir -p /data/3306/data
 mkdir -p /data/3306/log
 
-cat >>$MY-CNF<<EOF
+cat >$MY_CNF<<EOF
 [client]
 port = 3306
 socket = /data/3306/mysql.sock
@@ -108,7 +109,7 @@ slow_query_log=1
 
 EOF
 
-cat >>$MYSQL<<EOF
+cat >$MYSQL<<EOF
 #!/bin/sh
 
 port=3306
@@ -120,14 +121,14 @@ CmdPath="/usr/local/mysql/bin"
 function_start_mysql()
 {
     printf "Starting MySQL...\n"
-    /bin/sh ${CmdPath}/mysqld_safe --defaults-file=/data/${port}/my.cnf 2>&1 > /dev/null &
+    /bin/sh \${CmdPath}/mysqld_safe --defaults-file=/data/\${port}/my.cnf 2>&1 > /dev/null &
 }
 
 #stop function
 function_stop_mysql()
 {
     printf "Stoping MySQL...\n"
-    ${CmdPath}/mysqladmin -u ${mysql_user} -p${mysql_pwd} -S /data/${port}/mysql.sock shutdown
+    \${CmdPath}/mysqladmin -u \${mysql_user} -p\${mysql_pwd} -S /data/\${port}/mysql.sock shutdown
 }
 
 #restart function
@@ -139,7 +140,7 @@ function_restart_mysql()
     function_start_mysql
 }
 
-case $1 in
+case \$1 in
 start)
     function_start_mysql
 ;;
@@ -150,7 +151,7 @@ restart)
     function_restart_mysql
 ;;
 *)
-    printf "Usage: /data/${port}/mysql {start|stop|restart}\n"
+    printf "Usage: /data/\${port}/mysql {start|stop|restart}\n"
 esac
 EOF
 
@@ -166,9 +167,11 @@ cd /usr/local/mysql/scripts
 show_head
 echo "Start mysql.........."
 show_tail
+source /etc/profile
+source /etc/profile
 /data/3306/mysql start
 CHECK_MYSQL_START=`netstat -lntp | grep 3306`
-if [[ $CHECK_MYSQL_START == "" ]]
+if [[ $CHECK_MYSQL_START != "" ]]
 then
 	action "Start Mysql: " /bin/true
 else
