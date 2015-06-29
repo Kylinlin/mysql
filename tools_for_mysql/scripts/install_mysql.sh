@@ -17,11 +17,14 @@ function show_tail(){
 	echo '++++++++++++++++++++++++END++++++++++++++++++++++++++++++++++'
 }
 
+read -p "Enter your password for mysql: " MYSQL_PASSWORD
+
 show_head
 echo "Preparing environment.........."
 show_tail
 
-# echo "`rpm -qa|grep mysql`" >tmp.list
+# 卸载mysql
+#echo "`rpm -qa|grep mysql`" >tmp.list
 # if [[ ! -s tmp.list ]]
 # then
         # echo "Never have installed mysql."
@@ -84,6 +87,7 @@ firewall-cmd --reload
 show_head
 echo "Configuring mysql.........."
 show_tail
+rm -rf /data/3306
 mkdir -p /data/3306/data
 mkdir -p /data/3306/log
 
@@ -169,14 +173,34 @@ echo "Start mysql.........."
 show_tail
 source /etc/profile
 source /etc/profile
+echo "Starting mysql, please wait 15 seconds;"
 /data/3306/mysql start
+sleep 15
 CHECK_MYSQL_START=`netstat -lntp | grep 3306`
 if [[ $CHECK_MYSQL_START != "" ]]
 then
 	action "Start Mysql: " /bin/true
+	mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
+	sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
 else
 	action "Start Mysql: " /bin/false
+	/data/3306/mysql restart
+	sleep 15
+	CHECK_MYSQL_START=`netstat -lntp | grep 3306`
+	if [[ $CHECK_MYSQL_START != "" ]]
+	then
+		echo "Restarting mysql, please wait 15 seconds;"
+		action "Restart Mysql: " /bin/true
+		mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
+		sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
+	else
+		echo "Mysql install failed;"
+	fi
+
 fi
+
+
+
 
 
 
