@@ -1,0 +1,3 @@
+tools_for_mysql文件夹压缩成tools_for_mysql.zip文件
+然后把该文件和run.sh上传到linux的/usr/local/src目录下
+先将run.sh用dos2unix命令转换文件格式，然后执行该文件即可
