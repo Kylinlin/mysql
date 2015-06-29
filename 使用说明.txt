@@ -1,7 +1,10 @@
-把tools_for_mysql文件夹压缩成tools_for_mysql.zip文件
-然后把该文件和run.sh上传到linux的/usr/local/src目录下
-先将run.sh用dos2unix命令转换文件格式，然后执行该文件即可
+1.把tools_for_mysql文件夹压缩成tools_for_mysql.zip文件
+2.然后把该文件和run.sh上传到linux的/usr/local/src目录下
+3.先将run.sh用dos2unix命令转换文件格式，然后执行该文件即可
+4.在安装过程中会要求输入mysql的启动密码（大概会在开始安装后的1分钟左右），然后就可以去看电影了
+5.mysql的编译安装需要大概20到30分钟
 
 注意：
 mysql的安装路径为：/usr/local/mysql
 使用了多实例的安装方式，使用了3306端口，启动mysql的命令为：mysql -uroot -p -S /data/3306/mysql.sock
+mysql的启动密码写入到了/data/3306/mysql文件中
