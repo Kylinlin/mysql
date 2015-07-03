@@ -26,6 +26,8 @@ mkdir -p /data/$PORT_NUM/log
 firewall-cmd --zone=public --add-port=$PORT_NUM/tcp --permanent
 firewall-cmd --reload
 
+read -p "Enter the id for your mysql instance: " ID_INSTANCE
+
 MY_CNF=/data/$PORT_NUM/my.cnf
 cat >$MY_CNF<<EOF
 [client]
@@ -38,9 +40,9 @@ socket = /data/$PORT_NUM/mysql.sock
 pid-file = /data/$PORT_NUM/data/mysql.pid
 basedir = /usr/local/mysql
 datadir = /data/$PORT_NUM/data
-#server-id=1
-#log-bin=mysql-bin
-#log-bin-index= mysql-bin.index
+server-id=$ID_INSTANCE
+log-bin=mysql-bin
+log-bin-index= mysql-bin.index
  
 # LOGGING
 log_error=/data/$PORT_NUM/log/mysql-error.log
