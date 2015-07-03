@@ -44,7 +44,7 @@ echo `date` > $REPLICATION_LOG
 $MYSQL_CMD -e "show slave status\G" >> $REPLICATION_LOG
 
 Slave_IO_Running=`cat $REPLICATION_LOG | egrep "Slave_IO_Running" | awk 'NR==1 {print $2}'`
-Slave_SQL_Running=`cat $REPLICATION_LOG | egrep "Slave_SQL_Running" | awk 'NR==2 {print $2}'`
+Slave_SQL_Running=`cat $REPLICATION_LOG | egrep "Slave_SQL_Running" | awk 'NR==1 {print $2}'`
 
 if [[ $Slave_IO_Running == "Yes" ]]
 then
