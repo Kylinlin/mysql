@@ -8,3 +8,8 @@
 mysql的安装路径为：/usr/local/mysql
 使用了多实例的安装方式，使用了3306端口，启动mysql的命令为：mysql -uroot -p -S /data/3306/mysql.sock
 mysql的启动密码写入到了/data/3306/mysql文件中
+
+
+
+文件：
+tools_for_mysql/scripts/multi_instanch_config.sh：执行这个文件，然后输入要配置的多实例的端口号和mysql登陆密码，就能自动配置多实例，生成的目录位于/data目录下

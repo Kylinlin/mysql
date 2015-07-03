@@ -102,7 +102,7 @@ socket = /data/3306/mysql.sock
 pid-file = /data/3306/data/mysql.pid
 basedir = /usr/local/mysql
 datadir = /data/3306/data
-server-id=1
+#server-id=1
 #log-bin=mysql-bin
 #log-bin-index= mysql-bin.index
  
