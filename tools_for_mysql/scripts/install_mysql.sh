@@ -199,7 +199,11 @@ else
 
 fi
 
-
+read -p "Do you want to configure more instance, enter y or n: " MULTI_INSTANCH
+if [[ $MULTI_INSTANCH == 'y' ]]
+then
+	sh multi_instance_config.sh
+fi
 
 
 
