@@ -8,11 +8,34 @@
 
 MYUSER=root
 MYPASS="123456"
-MYSOCK=/data/3307/mysql.sock
 MYSQL_PATH=/usr/local/mysql/bin
+
+FTPSERVER=192.168.1.205
+FTPUSER=Administrator
+FTPPASSWD=nf56slogic789654d
+
+read -p "Enter the port for mysql: " PORT
+MYSOCK=/data/$PORT/mysql.sock
 MYSQL_CMD="$MYSQL_PATH/mysql -u$MYUSER -p$MYPASS -S $MYSOCK"
 
-read -p "Insert the date you wanna replication on,eg:2015-07-03: " RECOVER_DATE
+echo "Do you need to download the backup from server? "
+read -p "Enter 1 for yes, enter 2 for no: " DOWNLOAD
+read -p "Insert the date you wanna replication on,eg: 2015-07-03: " RECOVER_DATE
+
+if [[ $DOWNLOAD == 1 ]]
+then
+ftp -i -n <<EFO
+	open $FTPSERVER
+	user $FTPUSER $FTPPASSWD
+	cd mysql
+	binary
+	get $RECOVER_DATE.tar.gz
+	close
+	bye
+EFO
+	tar -zxf $RECOVER_DATE.tar.gz
+fi	
+
 BACKUP_PATH=/server/backup/$RECOVER_DATE
 LOG_FILE=$BACKUP_PATH/log_$RECOVER_DATE.log
 DATA_FILE=$BACKUP_PATH/data_$RECOVER_DATE.sql.gz
@@ -37,7 +60,7 @@ MASTER_LOG_POS=$BIN_LOG_POS;"
 
 $MYSQL_CMD -e "start slave;"
 
-REPLICATION_LOG=/server/backup/replication_log_`date +%F`.log
+REPLICATION_LOG=/server/backup/replication_`date +%F`.log
 CONTACT_EMAIL=kylinlingh@foxmail.com
 
 echo `date` > $REPLICATION_LOG

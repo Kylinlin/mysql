@@ -40,6 +40,7 @@ yum -y install make gcc-c++ cmake bison-devel  ncurses-devel
 yum install libaio libaio-devel -y
 yum install perl-Data-Dumper -y
 yum install net-tools -y
+yum install ftp -y
 
 show_head
 echo "Installing mysql.........."

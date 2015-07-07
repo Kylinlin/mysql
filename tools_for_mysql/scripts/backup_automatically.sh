@@ -10,11 +10,11 @@ MYUSER=root
 MYPASS="123456"
 MYSOCK=/data/3306/mysql.sock
 BACKUP_DIR=/server/backup
-BACKUP_LOG=$BACKUP_DIR/backup_log.log
+BACKUP_LOG=$BACKUP_DIR/backup.log
 TODAY=`date +%F`
 
 FTPSERVER=192.168.1.205
-KEEPDAY=1
+KEEPDAY=7
 FTPUSER=Administrator
 FTPPASSWD=nf56slogic789654d
 
@@ -22,7 +22,7 @@ FTPPASSWD=nf56slogic789654d
 echo "-----------" `date +%F` "-----------" >>$BACKUP_LOG
 echo -e "Delete period backup file: \c" >>$BACKUP_LOG
 echo `find $BACKUP_DIR -mtime +$KEEPDAY` >>$BACKUP_LOG
-#find $BACKUP_DIR -mtime +$KEEPDAY -exec rm {} \;
+find $BACKUP_DIR -mtime +$KEEPDAY -exec rm {} \;
 
 BACKUP_PATH=/server/backup/$TODAY
 mkdir -p $BACKUP_PATH
@@ -39,7 +39,7 @@ $MYSQL_CMD -e "show master status;" >>$LOG_FILE
 ${MYSQL_DUMP} | gzip > $DATA_FILE
 $MYSQL_CMD -e "unlock tables;"
 
-tar -zcf $TODAY.tar.gz $BACKUP_PATH
+tar -zcf $TODAY.tar.gz $TODAY/
 
 mail -s "mysql slave log" $CONTACT_MAIL < $LOG_FILE
 
@@ -50,6 +50,7 @@ user $FTPUSER $FTPPASSWD
 cd mysql
 lcd $BACKUP_DIR
 hash
+binary
 prompt
 put $TODAY.tar.gz
 close
