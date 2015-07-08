@@ -39,6 +39,7 @@ $MYSQL_CMD -e "show master status;" >>$LOG_FILE
 ${MYSQL_DUMP} | gzip > $DATA_FILE
 $MYSQL_CMD -e "unlock tables;"
 
+cd $BACKUP_DIR
 tar -zcf $TODAY.tar.gz $TODAY/
 
 mail -s "mysql slave log" $CONTACT_MAIL < $LOG_FILE
