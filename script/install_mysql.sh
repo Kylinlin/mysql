@@ -5,8 +5,8 @@
 #Created Time   :   Thu 17 Sep 2015 09:38:59 AM CST
 #Email          :   kylinlingh@foxmail.com
 #Github         :   https://github.com/Kylinlin
-#Version        :	2.0
-#Description    :	Install mysql with source code.
+#Version        :   2.0
+#Description    :   Install mysql with source code.
 ###############################################################
 
 SRC_LOCATION=/usr/local/src
@@ -18,7 +18,9 @@ MYSQL=/data/3306/mysql
 . /etc/rc.d/init.d/functions
 
 function Show_Informations {
-    echo -e "\e[1;32m+-------------------------------------------------------------------------------+
+    echo -n -e "\e[1;36mEnter the password for mysql: \e[0m"
+    read MYSQL_PASSWORD
+    echo -e "\e[1;32m+------------------------------------------------------+
         Here is the informations for your installation
    
     Mysql will be installed to : /usr/local/mysql
@@ -30,21 +32,22 @@ function Show_Informations {
     Command to start mysql     : /data/3306/mysql start
     Command to stop mysql      : /data/3306/mysql stop
     Command to restart mysql   : /data/3306/mysql restart
-    Command to connect mysql   : mysql -uroot -p -S /data/3306/mysql.sock
-+-------------------------------------------------------------------------------+\e[0m" > ../log/install.log
+    Command to connect mysql   : mysql -uroot -p$MYSQL_PASSWORD -S /data/3306/mysql.sock
++------------------------------------------------------+\e[0m" > ../log/install.log
 }
 
 #Install necessary tools for mysql
 function Prepare_Env {
     yum install -y make gcc-c++ cmake bison-devel ncurses-devel > /dev/null
-    yum install libaio libaio-devel -y > /dev/null
-    yum install perl-Data-Dumper -y > /dev/null
+    yum install libaio libaio-devel -y /dev/null
+    yum install perl-Data-Dumper -y > /dev/null 
     yum install ftp -y > /dev/null
+    yum install net-tools -y > /dev/null
 } 
 
 function Compile {
     cd ../packages
-    tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION > /dev/null
+    tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION  
     cd $SRC_LOCATION/$MYSQL_DISTRIBUTION
     cmake \
         -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
@@ -79,8 +82,8 @@ function Configure {
     chown -R mysql:mysql $MYSQL_LOCATION
 
     #Add port to firewall
-    firewall-cmd --zone=public --add-port=3306/tcp --permanent
-    firewall-cmd --reload
+    firewall-cmd --zone=public --add-port=3306/tcp --permanent > /dev/null
+    firewall-cmd --reload > /dev/null
     
     #Restore the data file to /data/3306/data
     rm -rf /data/3306
@@ -164,18 +167,19 @@ EOF
     source /etc/profile
 
     cd /usr/local/mysql/scripts
-    ./mysql_install_db --defaults-file=/data/3306/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/data/3306/data
+    ./mysql_install_db --defaults-file=/data/3306/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/data/3306/data > /dev/null
 
-    source /etc/profile
-    source /etc/profile
 
 }
 
 function Startup {
 
-    echo -e "\e[1;32mStarting mysql, please wait 15 seconds;\e[0m"
+    echo -e "\e[1;32mStarting mysql, please wait for 15 seconds;\e[0m"
     /data/3306/mysql start
     sleep 15
+
+    source /etc/profile
+    source /etc/profile
 
     CHECK_MYSQL_START=`netstat -lntp | grep 3306`
     if [[ $CHECK_MYSQL_START != "" ]]
@@ -209,9 +213,9 @@ function Startup {
     
 }
 
-#Call All functions                                                                                                                                
-Show_Informations                                                                                                                                 
-Prepare_Env                                                                                                                                        
-Compile                                                                                                                                            
-Configure                                                                                                                                          
+#Call All functions
+Show_Informations
+Prepare_Env
+Compile
+Configure
 Startup
