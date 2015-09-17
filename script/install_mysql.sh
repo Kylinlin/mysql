@@ -20,8 +20,8 @@ MYSQL=/data/3306/mysql
 function Show_Informations {
     echo -n -e "\e[1;36mEnter the password for mysql: \e[0m"
     read MYSQL_PASSWORD
-    echo -e "\e[1;32m+------------------------------------------------------+
-        Here is the informations for your installation
+    echo -e "\e[1;32m+-----------------Informations for your installation（安装信息）-------------------------------------+
+	Englis Description:
    
     Mysql will be installed to : /usr/local/mysql
     Mysql data files' location : /data/3306/data
@@ -33,7 +33,20 @@ function Show_Informations {
     Command to stop mysql      : /data/3306/mysql stop
     Command to restart mysql   : /data/3306/mysql restart
     Command to connect mysql   : mysql -uroot -p$MYSQL_PASSWORD -S /data/3306/mysql.sock
-+------------------------------------------------------+\e[0m" > ../log/install.log
+	
+	中文版说明：
+	
+	Mysql的安装路径         ： /usr/local/mysql
+	Mysql的数据文件存放路径 ： /data/3306/data
+	Mysql的配置文件			： /data/3306/my.cnf
+	Mysql的启动文件			： /data/3306/mysql
+	Mysql的锁文件			:  /data/3306/mysql.sock
+	
+	启动mysql的命令			： /data/3306/mysql start
+	停止mysql的命令			： /data/3306/mysql stop
+	重启mysql的命令			： /data/3306/mysql restart
+	连接mysql的命令			： mysql -uroot -p$MYSQL_PASSWORD -S /data/3306/mysql.sock
++---------------------------------------------------------------------------------------------+\e[0m" > ../log/install.log
 }
 
 #Install necessary tools for mysql
