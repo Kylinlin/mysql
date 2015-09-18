@@ -1,6 +1,6 @@
 安装方式：
 
-1.在linux上执行命令：wget -qO- https://github.com/Kylinlin/Install_Mysql_On_Centos7/setup_thr_network.sh | sh -x
+1.在linux上执行命令：wget -qO- https://raw.github.com/Kylinlin/Install_Mysql_On_Centos7/master/setup_thr_network.sh | sh -x
 2.在安装过程中会要求输入mysql的启动密码（大概会在开始安装后的1分钟左右）
 3.mysql的编译安装需要大概20到30分钟，在安装mysql的最后会询问是否配置多实例，是则输入yes，否则输入no
 
