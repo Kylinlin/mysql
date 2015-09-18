@@ -32,14 +32,19 @@ function Input_Info {
         read RECOVER_DATE
         echo -n -e "\e[1;36mDo you need to download the backup from server? yes or no: \e[0m"
         read DOWNLOAD
-        echo -e "\e[1;32m***********The informations you enter is here***********
+        echo -e "\e[1;32m+-----------------The recover informations you enter is here(灾难恢复信息)-----------------------------+
             Instance Port      : $PORT_NUM
             Date to rocll back : $RECOVER_DATE
             Need to download   : $DOWNLOAD
-********************************************************\e[0m"
++------------------------------------------------------------------------------------------------------+\e[0m"
         echo -n -e "\e[1;36mConfirm it? yes or no: \e[0m"
         read CHECK
         if [[ $CHECK == 'yes' ]]; then
+			echo -e "\e[1;32m+-----------------The recover informations you enter is here-------------------------------------+
+				Instance Port      : $PORT_NUM
+				Date to rocll back : $RECOVER_DATE
+				Need to download   : $DOWNLOAD
++-------------------------------------------------------------------------------------------+\e[0m" >> ../log/install.log		
             break 2;
         fi
     done

@@ -33,15 +33,20 @@ function Input_Info {
         echo -n -e "\e[1;36mEnter the id for your instance: \e[0m"
         read ID_INSTANCE
 
-        echo -e "\e[1;32m**********The informations you enter is here**********
+        echo -e "\e[1;32m+-----------------The multi_instances informations（多实例配置信息） you enter is here-------------------------------------+
             Instance Number : $PORT_NUM
             Instance ID     : $ID_INSTANCE
             Mysql Password  : $MYSQL_PASSWORD 
-*******************************************************\e[0m"
++--------------------------------------------------------------------------------------------------------------------------+\e[0m"
         echo -n -e "\e[1;36mConfirm it or not? yes or no: \e[0m"
         
         read CHECK
         if [[ $CHECK == 'yes' ]] ; then
+			echo -e "\e[1;32m+-----------------The multi_instances informations（多实例配置信息） you enter is here-------------------------------------+
+            Instance Number : $PORT_NUM
+            Instance ID     : $ID_INSTANCE
+            Mysql Password  : $MYSQL_PASSWORD 
++--------------------------------------------------------------------------------------------------------------------------+\e[0m" >> ../log/install.log
             break 2;
         fi
     done
