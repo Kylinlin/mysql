@@ -20,7 +20,7 @@ function Input_Info {
             if [[ ! -d /data/$PORT_NUM ]]; then
                 break 1;
             else
-                echo -n -e "\e[1;31mThe port you enter is already esists, delete it or reenter another number!\n\e[0m"
+                echo -e "\e[1;31mThe port you enter is already esists, delete it or reenter another number!\n\e[0m"
             fi
         done
         echo  -n -e "\e[1;36mEnter the password for mysql: \e[0m"

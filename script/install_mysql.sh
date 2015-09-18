@@ -221,7 +221,7 @@ function Startup {
     read MULTI_INSTANCH
     if [[ $MULTI_INSTANCH == 'yes' ]]
     then
-        sh multi_instance_config.sh
+        sh multi_instance.sh
     fi
     
 }
