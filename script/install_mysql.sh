@@ -17,7 +17,7 @@ MYSQL=/data/3306/mysql
 
 . /etc/rc.d/init.d/functions
 
-function Show_Informations {
+function Echo_Informations {
     echo -n -e "\e[1;36mEnter the password for mysql: \e[0m"
     read MYSQL_PASSWORD
     echo -e "\e[1;32m+-----------------Informations for your installation（安装信息）-------------------------------------+
@@ -52,7 +52,7 @@ function Show_Informations {
 #Install necessary tools for mysql
 function Prepare_Env {
     yum install -y make gcc-c++ cmake bison-devel ncurses-devel > /dev/null
-    yum install libaio libaio-devel -y /dev/null
+    yum install libaio libaio-devel -y > /dev/null
     yum install perl-Data-Dumper -y > /dev/null 
     yum install ftp -y > /dev/null
     yum install net-tools -y > /dev/null
@@ -227,8 +227,8 @@ function Startup {
 }
 
 #Call All functions
-Show_Informations
 Prepare_Env
 Compile
+Echo_Informations
 Configure
 Startup
