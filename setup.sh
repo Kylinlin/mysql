@@ -12,7 +12,7 @@
  
 function Setup {
     yum install git dos2unix -y > /dev/null
-    git clone https://github.com/Kylinlin/install_mysql_automatically.git
+    git clone https://github.com/Kylinlin/mysql.git
     cd ~/mysql/script/
 	dos2unix *
     sh install_mysql.sh
