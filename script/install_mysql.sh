@@ -18,6 +18,7 @@ MYSQL=/data/3306/mysql
 . /etc/rc.d/init.d/functions
 
 function Echo_Informations {
+	echo "directory: `pwd`"
     echo -n -e "\e[1;36mEnter the password for mysql: \e[0m"
     read MYSQL_PASSWORD
     echo -e "\e[1;32m+-----------------Informations for your installation（安装信息）-------------------------------------+
@@ -228,7 +229,7 @@ function Startup {
 
 #Call All functions
 Prepare_Env
-Compile
+#Compile
 Echo_Informations
 Configure
 Startup
