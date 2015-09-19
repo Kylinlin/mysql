@@ -13,7 +13,7 @@
 function Setup {
     yum install git dos2unix -y > /dev/null
     git clone https://github.com/Kylinlin/mysql.git
-    cd mysql/script/
+    cd mysql/scripts/
 	dos2unix *
     sh install_mysql.sh
     if [[ ! -d /server ]]; then

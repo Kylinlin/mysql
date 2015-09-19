@@ -1,7 +1,15 @@
 #!/bin/bash
+###############################################################
+#File Name      :   install_mysql.sh
+#Arthor         :   kylin
+#Created Time   :   Thu 17 Sep 2015 09:38:59 AM CST
+#Email          :   kylinlingh@foxmail.com
+#Github         :   https://github.com/Kylinlin
+#Version        :   2.0
+#Description    :   Install mysql with source code.
+###############################################################
 
 SRC_LOCATION=/usr/local/src
-TOOLS_LOACTION=$SRC_LOCATION/tools_for_mysql
 MYSQL_DISTRIBUTION=mysql-5.6.25
 MYSQL_LOCATION=/usr/local/mysql
 MY_CNF=/data/3306/my.cnf
@@ -9,89 +17,95 @@ MYSQL=/data/3306/mysql
 
 . /etc/rc.d/init.d/functions
 
-function show_head(){
-	echo $'\n++++++++++++++++++++++++BEGIN++++++++++++++++++++++++++++++++++'
-}
+function Echo_Informations {
+    echo -e "\e[1;32m+-----------------Informations for your installation（安装信息）-------------------------------------+
+	Englis Description:
+   
+    Mysql will be installed to : /usr/local/mysql
+    Mysql data files' location : /data/3306/data
+    Mysql configuration file   : /data/3306/my.cnf
+    Mysql startup scripts      : /data/3306/mysql
+    Mysql sock file            : /data/3306/mysql.sock
 
-function show_tail(){
-	echo '++++++++++++++++++++++++END++++++++++++++++++++++++++++++++++'
-}
-
-read -p "Enter your password for mysql: " MYSQL_PASSWORD
-
-show_head
-echo "Preparing environment.........."
-show_tail
-
-# 卸载mysql
-#echo "`rpm -qa|grep mysql`" >tmp.list
-# if [[ ! -s tmp.list ]]
-# then
-        # echo "Never have installed mysql."
-# else
-        # exec <tmp.list
-        # while read line
-        # do
-                # echo $line
-        # done
-# fi
-
-yum -y install make gcc-c++ cmake bison-devel  ncurses-devel
-yum install libaio libaio-devel -y
-yum install perl-Data-Dumper -y
-yum install net-tools -y
-yum install ftp -y
-
-show_head
-echo "Installing mysql.........."
-show_tail
-cd $TOOLS_LOACTION/tools
-tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION
-cd $SRC_LOCATION/$MYSQL_DISTRIBUTION
-
-cmake \
--DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
--DMYSQL_DATADIR=/usr/local/mysql/data \
--DSYSCONFDIR=/etc \
--DWITH_MYISAM_STORAGE_ENGINE=1 \
--DWITH_INNOBASE_STORAGE_ENGINE=1 \
--DWITH_MEMORY_STORAGE_ENGINE=1 \
--DWITH_READLINE=1 \
--DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock \
--DMYSQL_TCP_PORT=3306 \
--DENABLED_LOCAL_INFILE=1 \
--DWITH_PARTITION_STORAGE_ENGINE=1 \
--DEXTRA_CHARSETS=all \
--DDEFAULT_CHARSET=utf8 \
--DDEFAULT_COLLATION=utf8_general_ci
-
-make && make install
-
-show_head
-echo "Adding user.........."
-show_tail
-CHECK_MYSQL_USER=`cat /etc/passwd | grep mysql`
-if [[ $CHECK_MYSQL_USER == "" ]]
-then
-	groupadd mysql 
-	useradd -g mysql mysql -s /sbin/nologin
-fi
+    Command to start mysql     : /data/3306/mysql start
+    Command to stop mysql      : /data/3306/mysql stop （Note: if you had set a password for mysql, you have to enter the password to stop mysql）
+    Command to restart mysql   : /data/3306/mysql restart (as above)
+    Command to connect mysql   : mysql -uroot -p -S /data/3306/mysql.sock
 	
-chown -R mysql:mysql $MYSQL_LOCATION
+	Please set a password for mysql ASAP, use command: /usr/local/mysql/bin/mysqladmin -u root -S /data/3306/mysql.sock password \"<password>\"
+	
+	
+	中文版说明：
+	
+	Mysql的安装路径         ： /usr/local/mysql
+	Mysql的数据文件存放路径 ： /data/3306/data
+	Mysql的配置文件			： /data/3306/my.cnf
+	Mysql的启动文件			： /data/3306/mysql
+	Mysql的锁文件			:  /data/3306/mysql.sock
+	
+	启动mysql的命令			： /data/3306/mysql start
+	停止mysql的命令			： /data/3306/mysql stop （注意：如果你已经为mysql设置了密码，你必须输入密码才能关闭mysql）
+	重启mysql的命令			： /data/3306/mysql restart （同上）
+	连接mysql的命令			： mysql -uroot -p -S /data/3306/mysql.sock
+	
+	请尽快修改mysql的密码，使用命令：/usr/local/mysql/bin/mysqladmin -u root -S /data/3306/mysql.sock password \"<password>\"
++---------------------------------------------------------------------------------------------+\e[0m" > ../log/install.log
+}
 
-show_head
-echo "Adding firewall.........."
-show_tail
-firewall-cmd --zone=public --add-port=3306/tcp --permanent
-firewall-cmd --reload
+function Prepare_Env {
+    yum install -y make gcc-c++ cmake bison-devel ncurses-devel > /dev/null
+    yum install libaio libaio-devel -y > /dev/null
+    yum install perl-Data-Dumper -y > /dev/null 
+    yum install ftp -y > /dev/null
+    yum install net-tools -y > /dev/null
+} 
 
-show_head
-echo "Configuring mysql.........."
-show_tail
-rm -rf /data/3306
-mkdir -p /data/3306/data
-mkdir -p /data/3306/log
+function Compile {
+    cd ../packages
+    tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION  
+    cd $SRC_LOCATION/$MYSQL_DISTRIBUTION
+    cmake \
+        -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
+        -DMYSQL_DATADIR=/usr/local/mysql/data \
+        -DSYSCONFDIR=/etc \
+        -DWITH_MYISAM_STORAGE_ENGINE=1 \
+        -DWITH_INNOBASE_STORAGE_ENGINE=1 \
+        -DWITH_MEMORY_STORAGE_ENGINE=1 \
+        -DWITH_READLINE=1 \
+        -DMYSQL_UNIX_ADDR=/var/lib/mysql/mysql.sock \
+        -DMYSQL_TCP_PORT=3306 \
+        -DENABLED_LOCAL_INFILE=1 \
+        -DWITH_PARTITION_STORAGE_ENGINE=1 \
+        -DEXTRA_CHARSETS=all \
+        -DDEFAULT_CHARSET=utf8 \
+        -DDEFAULT_COLLATION=utf8_general_ci 
 
+    make && make install 
+    return 0
+}
+
+function Configure {
+    
+    #Add user mysql
+    CHECK_MYSQL_USER=`cat /etc/passwd | grep mysql`
+    if [[ $CHECK_MYSQL_USER == "" ]]
+    then
+        groupadd mysql 
+        useradd -g mysql mysql -s /sbin/nologin
+    fi
+
+    chown -R mysql:mysql $MYSQL_LOCATION
+
+    #Add port to firewall
+    firewall-cmd --zone=public --add-port=3306/tcp --permanent > /dev/null
+    firewall-cmd --reload > /dev/null
+    
+    #Restore the data file to /data/3306/data
+    rm -rf /data/3306
+    mkdir -p /data/3306/data
+    mkdir -p /data/3306/log
+
+    #Configure file my.cnf
 cat >$MY_CNF<<EOF
 [client]
 port = 3306
@@ -114,6 +128,7 @@ slow_query_log=1
 
 EOF
 
+#Add the mysql startup script 
 cat >$MYSQL<<EOF
 #!/bin/sh
 
@@ -160,52 +175,58 @@ restart)
 esac
 EOF
 
-chown -R mysql:mysql /data
-find /data -name mysql -exec chmod 700 {} \;
+    chown -R mysql:mysql /data
+    find /data -name mysql -exec chmod 700 {} \;
 
-echo 'export PATH=$PATH:/usr/local/mysql/bin' >>/etc/profile
-source /etc/profile
+    echo 'export PATH=$PATH:/usr/local/mysql/bin' >>/etc/profile
+    source /etc/profile
 
-cd /usr/local/mysql/scripts
-./mysql_install_db --defaults-file=/data/3306/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/data/3306/data
-
-show_head
-echo "Start mysql.........."
-show_tail
-source /etc/profile
-source /etc/profile
-echo "Starting mysql, please wait 15 seconds;"
-/data/3306/mysql start
-sleep 15
-CHECK_MYSQL_START=`netstat -lntp | grep 3306`
-if [[ $CHECK_MYSQL_START != "" ]]
-then
-	action "Start Mysql: " /bin/true
-	mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
-	sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
-else
-	action "Start Mysql: " /bin/false
-	/data/3306/mysql restart
-	sleep 15
-	CHECK_MYSQL_START=`netstat -lntp | grep 3306`
-	if [[ $CHECK_MYSQL_START != "" ]]
-	then
-		echo "Restarting mysql, please wait 15 seconds;"
-		action "Restart Mysql: " /bin/true
-		mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
-		sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
-	else
-		echo "Mysql install failed;"
-	fi
-
-fi
-
-read -p "Do you want to configure more instance, enter y or n: " MULTI_INSTANCH
-if [[ $MULTI_INSTANCH == 'y' ]]
-then
-	sh multi_instance_config.sh
-fi
+    cd /usr/local/mysql/scripts
+    ./mysql_install_db --defaults-file=/data/3306/my.cnf --user=mysql --basedir=/usr/local/mysql --datadir=/data/3306/data > /dev/null
 
 
+}
+
+function Startup {
+
+    echo -e "\e[1;32mStarting mysql, please wait for 15 seconds...\e[0m"
+    /data/3306/mysql start
+    sleep 15
+
+    source /etc/profile
+    source /etc/profile
+
+    CHECK_MYSQL_START=`netstat -lntp | grep 3306`
+    if [[ $CHECK_MYSQL_START != "" ]]
+    then
+        action "Start Mysql: " /bin/true
+		echo -e "\e[1;32mMysql install Successed, please re login.\e[0m"
+        #mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
+        #sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
+    else
+        action "Start Mysql: " /bin/false
+        /data/3306/mysql restart
+        sleep 15
+        CHECK_MYSQL_START=`netstat -lntp | grep 3306`
+        if [[ $CHECK_MYSQL_START != "" ]]
+        then
+            echo -e "\e[1;31mRestarting mysql, please wait 15 seconds...\e[0m"
+            action "Restart Mysql: " /bin/true
+			echo -e "\e[1;32mMysql install Successed, please re login.\e[0m"
+            #mysqladmin -u root -S /data/3306/mysql.sock password "$MYSQL_PASSWORD"
+            #sed -i "s/mysql_pwd=\"\"/mysql_pwd=\"$MYSQL_PASSWORD\"/g" /data/3306/mysql 
+        else
+            echo -e "\e[1;31mMysql install failed.\e[0m"
+        fi
+    
+    fi   
+}
 
 
+
+#Call All functions
+Echo_Informations
+Prepare_Env
+Compile
+Configure
+Startup
