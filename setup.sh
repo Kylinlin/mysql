@@ -1,6 +1,6 @@
 #!/bin/bash
 ###############################################################
-#File Name      :   setup_thr_network.sh
+#File Name      :   setup.sh
 #Arthor         :   kylin
 #Created Time   :   Sat 19 Sep 2015 04:04:15 AM CST
 #Email          :   kylinlingh@foxmail.com
