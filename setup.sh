@@ -19,7 +19,7 @@ function Setup {
     if [[ ! -d /server ]]; then
         mkdir /server
     fi  
-    cp backup_mysql.sh /server/
+    cp -f backup_mysql.sh /server/
 }
  
 Setup

@@ -124,7 +124,7 @@ function Check_State {
         action "Slave_SQL_Running: " /bin/false
     fi
 
-    mail -s "mysql slave result" $CONTACT_EMAIL < $REPLICATION_LOG
+    #mail -s "mysql slave result" $CONTACT_EMAIL < $REPLICATION_LOG
 }
 
 #Call the functions

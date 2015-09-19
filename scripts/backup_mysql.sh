@@ -18,6 +18,12 @@ TODAY=`date +%F`
 
 function Delete_Expired_Date {
     EXPIRED_PERIOD=7
+	if [[ ! -d $BACKUP_DIR ]]; then
+		mkdir -p $BACKUP_DIR
+	fi
+	if [[ ! -f $BACKUP_LOG ]]; then
+		touch $BACKUP_LOG
+	fi
     echo "+-----------------------"$TODAY"-------------------------+" >> $BACKUP_LOG    
     echo "Deleting expired backup file: " >> $BACKUP_LOG
     echo `find $BACKUP_DIR -mtime +$EXPIRED_PERIOD` >> $BACKUP_LOG
@@ -44,8 +50,9 @@ function Backup_Date {
     cd $BACKUP_DIR
     tar -zcf $TODAY.tar.gz $TODAY/
 
-    CONTACT_MAIL=kylinlingh@foxmail.com
-    mail -s "mysql slave log" $CONTACT_MAIL < $LOG_FILE
+	#yum install mail -y > /dev/null
+    #CONTACT_MAIL=kylinlingh@foxmail.com
+    #mail -s "mysql slave log" $CONTACT_MAIL < $LOG_FILE
 }
 
 function Upload_Backup_Files {
