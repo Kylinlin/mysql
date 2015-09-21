@@ -44,7 +44,7 @@ function Input_Info {
 				Instance Port      : $PORT_NUM
 				Date to rocll back : $RECOVER_DATE
 				Need to download   : $DOWNLOAD
-+-------------------------------------------------------------------------------------------+\e[0m" >> ../log/install.log		
++-------------------------------------------------------------------------------------------+\e[0m" >> ../log/install_mysql.log		
             break 2;
         fi
     done
