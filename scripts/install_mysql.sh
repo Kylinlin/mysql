@@ -49,7 +49,7 @@ function Echo_Informations {
 	连接mysql的命令			： mysql -uroot -p -S /data/3306/mysql.sock
 	
 	请尽快修改mysql的密码，使用命令：/usr/local/mysql/bin/mysqladmin -u root -S /data/3306/mysql.sock password \"<password>\"
-+---------------------------------------------------------------------------------------------+\e[0m" > ../log/install.log
++---------------------------------------------------------------------------------------------+\e[0m" > ../log/install_mysql.log
 }
 
 function Prepare_Env {
