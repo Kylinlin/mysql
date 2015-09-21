@@ -46,7 +46,7 @@ function Input_Info {
             Instance Number : $PORT_NUM
             Instance ID     : $ID_INSTANCE
             Mysql Password  : $MYSQL_PASSWORD 
-+--------------------------------------------------------------------------------------------------------------------------+\e[0m" >> ../log/install.log
++--------------------------------------------------------------------------------------------------------------------------+\e[0m" >> ../log/install_mysql.log
             break 2;
         fi
     done
