@@ -4,6 +4,7 @@
 #Arthor         :   kylin
 #Created Time   :   Thu 17 Sep 2015 06:38:51 PM CST
 #Email          :   kylinlingh@foxmail.com
+#Blog           :   http://www.cnblogs.com/kylinlin/
 #Github         :   https://github.com/Kylinlin
 #Version        :   2.0
 #Description    :   Configure mysql with multiple instances.

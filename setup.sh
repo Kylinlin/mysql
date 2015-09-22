@@ -4,6 +4,7 @@
 #Arthor         :   kylin
 #Created Time   :   Sat 19 Sep 2015 04:04:15 AM CST
 #Email          :   kylinlingh@foxmail.com
+#Blog           :   http://www.cnblogs.com/kylinlin/
 #Github         :   https://github.com/Kylinlin
 #Version        :   1.0
 #Description    :   Install mysql through network.

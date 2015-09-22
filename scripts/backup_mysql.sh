@@ -4,6 +4,7 @@
 #Arthor         :   kylin
 #Created Time   :   Fri 18 Sep 2015 09:36:55 AM CST
 #Email          :   kylinlingh@foxmail.com
+#Blog           :   http://www.cnblogs.com/kylinlin/
 #Github         :   https://github.com/Kylinlin
 #Version        :   2.0
 #Description    :   Backup mysql daily.
