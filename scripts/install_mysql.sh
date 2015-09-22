@@ -53,6 +53,7 @@ function Echo_Informations {
 }
 
 function Prepare_Env {
+	echo -n -e "\e[1;33mInstalling compile tools,please wait for a while...\e[0m"
     yum install -y make gcc-c++ cmake bison-devel ncurses-devel > /dev/null
     yum install libaio libaio-devel -y > /dev/null
     yum install perl-Data-Dumper -y > /dev/null 
@@ -61,6 +62,7 @@ function Prepare_Env {
 } 
 
 function Compile {
+	echo -n -e "\e[1;33mCompiling system,please wait for a while...\e[0m"
     cd ../packages
     tar xf $MYSQL_DISTRIBUTION.tar.gz -C $SRC_LOCATION  
     cd $SRC_LOCATION/$MYSQL_DISTRIBUTION
@@ -85,7 +87,7 @@ function Compile {
 }
 
 function Configure {
-    
+    echo -n -e "\e[1;33mConfiguring mysql,please wait for a while...\e[0m"
     #Add user mysql
     CHECK_MYSQL_USER=`cat /etc/passwd | grep mysql`
     if [[ $CHECK_MYSQL_USER == "" ]]
@@ -188,7 +190,6 @@ EOF
 }
 
 function Startup {
-
     echo -e "\e[1;32mStarting mysql, please wait for 15 seconds...\e[0m"
     /data/3306/mysql start
     sleep 15
